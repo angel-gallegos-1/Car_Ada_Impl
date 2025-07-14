@@ -1,7 +1,7 @@
 --Make Test_framework a part of car submodule
 project Car_Ada_Impl is
-   for Main use ("main.adb");
-   for Source_Dirs use ("src");
+   for Main use ("main.adb","alarm_main.adb","starter_main.adb");
+   for Source_Dirs use ("src","test/alarm_test_framework","test/starter_test_framework","Ada_Test_Trace_Framework");
    for Object_Dir use "obj";
 
    -- -g: includes debug info

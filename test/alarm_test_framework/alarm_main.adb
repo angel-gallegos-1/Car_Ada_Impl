@@ -5,7 +5,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Command_Line;
 with Alarm;use Alarm;
 with Starter;use Starter;
-procedure Main is
+procedure Alarm_Main is
   
    Input_Table: Kind2_Trace_Parser.Kind2_Table;
    Format_Table: Kind2_Trace_Parser.Kind2_Table;
@@ -170,4 +170,4 @@ begin
    
    end if;
 
-end Main;
+end Alarm_Main;
