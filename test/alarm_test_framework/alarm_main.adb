@@ -16,7 +16,9 @@ procedure Alarm_Main is
 
   procedure Search_Directory(Inp_Path: String;Out_Dir: String) is
 
-
+      
+      
+      
       --Call this function to add output of State Machine as String to end of Row
       procedure Add_Output(Row: in out Kind2_Trace_Parser.Cell_Vectors.Vector; Value: String) is 
 
@@ -27,7 +29,7 @@ procedure Alarm_Main is
       --Wrapper that calls actual state machine 
       --takes vector and puts them into parameters to be used on actual 
       --MODIFY TO REFLECT ACTUAL STATEMACHINE BEING USED
-      procedure State_Machine_Wrapper(Row: in out Kind2_Trace_Parser.Cell_Vectors.Vector) is
+      procedure State_Machine_Wrapper(other: in out Prev_Alarm_Button_State;Row: in out Kind2_Trace_Parser.Cell_Vectors.Vector) is
    
          --Values to hold inputs from Row
          test_alarm_state: Alarm_State;
@@ -43,7 +45,7 @@ procedure Alarm_Main is
 
             test_starter_state.state := S_State'Val(Integer'Value(To_String(Row(1))));
 
-            --Custom Logic for String -> Boolean Conversion 
+            --Custom Logic for String -> Boolean Conversion
             if Row(3) = "true" then
                test_alarm_button := True;
             elsif Row(3) = "false" then
@@ -55,20 +57,21 @@ procedure Alarm_Main is
 
             --Convert String Representation of inputs to Proper Ada type Equivalent (change to fit state machine)
             --MODIFY TO RELECT ACTUAL STATE MACHINE BEING USED
-            Out_Val:=Alarm.Transition(test_alarm_state.state,test_starter_state,test_alarm_button);
-         
+            Out_Val:=Alarm.Transition(other,test_alarm_state.state,test_starter_state,test_alarm_button);
+
             --Convert Value to String then Call Add_Output to have Value stored in the Row. 
             --Enum-> Integer -> String -> to be added to end of the Row
             Add_Output(Row, A_State'Enum_Rep(Out_Val)'Image);
-
       end State_Machine_Wrapper;
 
 
 
       --Procedure to process CSV in Test Trace Directory
       procedure Process_Search_Item(Search_Item : in Directory_Entry_Type) is
-         --DEBUG: Step Counter
+         --DEBUG: Step Counter 
          Count: Integer:=0;
+         --Value to store extra information to be passed to the state machine
+         other: Prev_Alarm_Button_State:= (False,False);
          Out_File_Name: String:= Out_Dir &"/" &"out_" & Simple_Name(Directory_Entry =>Search_Item);
       begin
          
@@ -87,7 +90,7 @@ procedure Alarm_Main is
          
             --Call state machine code on column data
             --State Machine Wrapper will call add output on returned values from state machine
-            State_Machine_Wrapper (E);
+            State_Machine_Wrapper (other,E);
 
             --DEBUG: Step Output
             --Put_Line (E'Image);

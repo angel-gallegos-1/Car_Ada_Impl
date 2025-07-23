@@ -11,7 +11,7 @@ package Car is
       alarm_button : Boolean := False;
    end record;
 
-   procedure Step(c_state : in out Car_State; speed : Integer);
-   procedure Start(c_state : in out Car_State);
+   procedure Step(other_alarm: in out Prev_Alarm_Button_State ;other_starter: in out Prev_Start_Button_State;c_state : in out Car_State; speed : Integer);
+   procedure Start(other_alarm: in out Prev_Alarm_Button_State;other_starter:  in out Prev_Start_Button_State;c_state : in out Car_State);
 
 end Car;

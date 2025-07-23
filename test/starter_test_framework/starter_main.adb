@@ -26,7 +26,7 @@ procedure Starter_Main is
       --Wrapper that calls actual state machine 
       --takes vector and puts them into parameters to be used on actual 
       --MODIFY TO REFLECT ACTUAL STATEMACHINE BEING USED
-      procedure State_Machine_Wrapper(Row: in out Kind2_Trace_Parser.Cell_Vectors.Vector) is
+      procedure State_Machine_Wrapper(other: in out Prev_Start_Button_State;Row: in out Kind2_Trace_Parser.Cell_Vectors.Vector) is
    
          --Values to hold inputs from Row
          test_start_button: Boolean;
@@ -59,7 +59,7 @@ procedure Starter_Main is
 
             --Convert String Representation of inputs to Proper Ada type Equivalent (change to fit state machine)
             --MODIFY TO RELECT ACTUAL STATE MACHINE BEING USED
-            Out_Val:=Starter.Transition(test_starter_state.state,test_start_button,test_speed);
+            Out_Val:=Starter.Transition(other,test_starter_state.state,test_start_button,test_speed);
          
             --Convert Value to String then Call Add_Output to have Value stored in the Row. 
             --Enum-> Integer -> String -> to be added to end of the Row
@@ -73,6 +73,8 @@ procedure Starter_Main is
       procedure Process_Search_Item(Search_Item : in Directory_Entry_Type) is
          --DEBUG: Step Counter
          Count: Integer:=0;
+         --Value to store extra information to be passed to the state machine
+         other: Prev_Start_Button_State:= (False,False);
          Out_File_Name: String:= Out_Dir &"/" &"out_" & Simple_Name(Directory_Entry =>Search_Item);
       begin
          
@@ -91,7 +93,7 @@ procedure Starter_Main is
          
             --Call state machine code on column data
             --State Machine Wrapper will call add output on returned values from state machine
-            State_Machine_Wrapper (E);
+            State_Machine_Wrapper(other,E);
 
             --DEBUG: Step Output
             --Put_Line (E'Image);
